@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodExpress - AngularJS Directives</title>
+
+    <!-- AngularJS Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <style>
+
+        /* =========================================
+           GENERAL STYLING
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff3e0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #3e2723;
+            color: white;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #ffb300;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            color: #ffb300;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: #3e2723;
+            margin-bottom: 12px;
+        }
+
+        .task {
+            font-size: 13px;
+            color: #bf360c;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            padding: 9px;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        button {
+            background-color: #e65100;
+            color: white;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 25px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e2723;
+        }
+
+        /* =========================================
+           HELLO WORLD
+        ========================================= */
+
+        .hello {
+            background-color: #3e2723;
+            color: #ffb300;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        /* =========================================
+           1. COMMENT BOX
+        ========================================= */
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        .comment-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .comment-list li {
+            background-color: #fff8f0;
+            border-left: 4px solid #ff7043;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .remove {
+            float: right;
+            color: #c62828;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .count {
+            color: #bf360c;
+            font-weight: bold;
+        }
+
+        /* =========================================
+           2. CALCULATOR
+        ========================================= */
+
+        .calc {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .calc input {
+            width: 120px;
+        }
+
+        .calc-result {
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #e65100;
+        }
+
+        /* =========================================
+           3. TODO LIST
+        ========================================= */
+
+        .todo-input input {
+            width: 70%;
+        }
+
+        .todo-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .todo-list li {
+            padding: 6px 0;
+            font-size: 16px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        footer {
+            background-color: #1b0f0b;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body ng-app="blogApp">
+
+<header>
+    <div class="logo">🍔 FoodExpress</div>
+    <nav>
+        <a href="#comments">Reviews</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#todo">To-Do</a>
+    </nav>
+</header>
+
+<main>
+
+<!-- =========================================
+     HELLO WORLD
+========================================= -->
+
+<section>
+    <p class="task">ng-app, ng-controller and expressions</p>
+    <h2>Hello World Application</h2>
+    <div class="hello" ng-controller="HelloWorldCtrl">
+        <h1>{{message}}</h1>
+    </div>
+</section>
+
+<!-- =========================================
+     1. SIMPLE COMMENT BOX
+========================================= -->
+
+<section id="comments" ng-controller="FrmController">
+    <p class="task">Task 1 - Simple Comment Box using Controller</p>
+    <h2>Post your Review</h2>
+    <p>Dish: <b>"Hyderabadi Biryani - Biryani House"</b></p>
+    <br>
+    <textarea ng-model="txtcomment" placeholder="Your Review"></textarea>
+    <button ng-click="btn_add()">Post Review</button>
+
+    <h3 style="margin-top:20px;">Customer Reviews
+        <span class="count">({{comment.length}})</span></h3>
+    <p ng-show="comment.length == 0">No reviews yet. Be the first to review this dish!</p>
+    <ul class="comment-list">
+        <li ng-repeat="comnt in comment track by $index">
+            {{ comnt }}
+            <a class="remove" href="" ng-click="remItem($index)">x</a>
+        </li>
+    </ul>
+</section>
+
+<!-- =========================================
+     2. SIMPLE CALCULATOR
+========================================= -->
+
+<section id="calculator" ng-controller="CalculatorController">
+    <p class="task">Task 2 - Simple Calculator</p>
+    <h2>Food Bill Calculator</h2>
+    <div class="calc">
+        <input type="number" ng-model="a" placeholder="Number 1">
+        <select ng-model="operator">
+            <option>+</option>
+            <option>-</option>
+            <option>*</option>
+            <option>/</option>
+        </select>
+        <input type="number" ng-model="b" placeholder="Number 2">
+    </div>
+    <p class="calc-result">
+        {{a}} {{operator}} {{b}} = {{ result() }}
+    </p>
+</section>
+
+<!-- =========================================
+     3. SIMPLE TODO LIST
+========================================= -->
+
+<section id="todo" ng-controller="todoController">
+    <p class="task">Task 3 - Simple Todo List</p>
+    <h2>Grocery Shopping List</h2>
+    <div class="todo-input">
+        <input ng-model="title" placeholder="Enter an item">
+        <button ng-click="add()">Add</button>
+    </div>
+    <ul class="todo-list">
+        <li ng-repeat="t in tasks track by $index">
+            <input type="checkbox" ng-model="t.done">
+            <span ng-class="{done: t.done}">{{ t.name }}</span>
+        </li>
+    </ul>
+    <p ng-show="tasks.length > 0">
+        Completed: {{ completed() }} / {{ tasks.length }}
+    </p>
+</section>
+
+</main>
+
+<footer>
+    <p>© 2026 FoodExpress. All Rights Reserved.</p>
+</footer>
+
+<!-- =========================================
+     ANGULARJS
+========================================= -->
+
+<script>
+
+    var app = angular.module("blogApp", []);
+
+    // ---------- HELLO WORLD ----------
+
+    app.controller("HelloWorldCtrl", function ($scope) {
+        $scope.message = "Hello World! Welcome to FoodExpress";
+    });
+
+    // ---------- 1. COMMENT BOX ----------
+
+    app.controller("FrmController", function ($scope) {
+        $scope.comment = [];
+
+        $scope.btn_add = function () {
+            if ($scope.txtcomment && $scope.txtcomment.trim() != "") {
+                $scope.comment.push($scope.txtcomment);
+                $scope.txtcomment = "";
+            }
+        };
+
+        $scope.remItem = function ($index) {
+            $scope.comment.splice($index, 1);
+        };
+    });
+
+    // ---------- 2. CALCULATOR ----------
+
+    app.controller("CalculatorController", function ($scope) {
+        $scope.a = 0;
+        $scope.b = 0;
+        $scope.operator = "+";
+
+        $scope.result = function () {
+            if ($scope.operator == "+") {
+                return $scope.a + $scope.b;
+            }
+            if ($scope.operator == "-") {
+                return $scope.a - $scope.b;
+            }
+            if ($scope.operator == "*") {
+                return $scope.a * $scope.b;
+            }
+            if ($scope.operator == "/") {
+                if ($scope.b == 0) return "Cannot divide by zero";
+                return $scope.a / $scope.b;
+            }
+        };
+    });
+
+    // ---------- 3. TODO LIST ----------
+
+    app.controller("todoController", function ($scope) {
+        $scope.tasks = [];
+
+        $scope.add = function () {
+            if ($scope.title && $scope.title.trim() != "") {
+                $scope.tasks.push({ name: $scope.title, done: false });
+                $scope.title = "";
+            }
+        };
+
+        $scope.completed = function () {
+            var count = 0;
+            angular.forEach($scope.tasks, function (t) {
+                if (t.done) count++;
+            });
+            return count;
+        };
+    });
+
+</script>
+
+</body>
+
+</html>
